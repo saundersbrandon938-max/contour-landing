@@ -1,0 +1,523 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>Contour Trail Planner</title>
+<meta name="description" content="Contour turns any hand-drawn or imported route into a mile-by-mile breakdown of climb, descent, surface, and exposure — so you know what a run actually costs before you lace up. Free to start, exports to Garmin, Suunto, and COROS.">
+<meta name="robots" content="index, follow">
+<meta name="keywords" content="trail running app, route planner, elevation profile, GPX export, backcountry running, vert calculator, ultramarathon training">
+<link rel="canonical" href="https://contourtrail.app/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Contour">
+<meta property="og:title" content="Contour — Plan Trail Runs by Vert, Not Just Miles">
+<meta property="og:description" content="A route planner that reads terrain the way trail runners do: pitch by pitch, in feet of climb, not just miles.">
+<meta property="og:url" content="https://contourtrail.app/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Contour — Plan Trail Runs by Vert, Not Just Miles">
+<meta name="twitter:description" content="A route planner that reads terrain the way trail runners do: pitch by pitch, in feet of climb, not just miles.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Contour",
+  "applicationCategory": "SportsApplication",
+  "operatingSystem": "iOS, Android, Web",
+  "description": "Route planning for trail runners: pitch-by-pitch grade, surface and exposure flags, offline vector maps, and GPX export to running watches.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "url": "https://contourtrail.app/"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Does Contour work offline in the backcountry?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Cache any route's vector map and elevation data before you leave signal — Contour keeps working with the phone in airplane mode." }
+    },
+    {
+      "@type": "Question",
+      "name": "Which watches can I export routes to?",
+      "acceptedAnswer": { "@type": "Answer", "text": "GPX and FIT export are built in, with tested profiles for Garmin, Suunto, and COROS devices." }
+    },
+    {
+      "@type": "Question",
+      "name": "How accurate is the elevation data on exposed alpine terrain?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Contour blends satellite DEM data with corrected barometric traces from public GPX uploads, so switchback-heavy and above-treeline sections stay accurate to roughly 15 feet per mile." }
+    }
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EEF0E7;
+    --bg-raised:#E4E8D9;
+    --bg-sunken:#E7EADD;
+    --ink:#17201A;
+    --ink-soft:#49543F;
+    --ink-faint:#7C866E;
+    --line:#C7CEB6;
+    --line-strong:#AAB495;
+    --accent:#D9581F;
+    --accent-strong:#B8420F;
+    --on-accent:#FBF3EA;
+    --moss:#3C5A3F;
+    --sky:#3E6270;
+    --focus:#2F5233;
+    --shadow: 220 25% 10%;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12160E;
+      --bg-raised:#1B2115;
+      --bg-sunken:#171D11;
+      --ink:#ECEEE1;
+      --ink-soft:#AEB89E;
+      --ink-faint:#77816A;
+      --line:#323B27;
+      --line-strong:#414C32;
+      --accent:#F1793D;
+      --accent-strong:#F1793D;
+      --on-accent:#171203;
+      --moss:#8FB08F;
+      --sky:#7FB0BE;
+      --focus:#F1793D;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12160E;
+    --bg-raised:#1B2115;
+    --bg-sunken:#171D11;
+    --ink:#ECEEE1;
+    --ink-soft:#AEB89E;
+    --ink-faint:#77816A;
+    --line:#323B27;
+    --line-strong:#414C32;
+    --accent:#F1793D;
+    --accent-strong:#F1793D;
+    --on-accent:#171203;
+    --moss:#8FB08F;
+    --sky:#7FB0BE;
+    --focus:#F1793D;
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; }
+  html{ color-scheme: light dark; }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Work Sans', ui-sans-serif, system-ui, sans-serif;
+    font-size:17px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Big Shoulders Display', 'Arial Narrow', sans-serif;
+    text-transform:uppercase;
+    font-weight:900;
+    line-height:0.94;
+    text-wrap:balance;
+    color:var(--ink);
+    margin:0;
+  }
+  a{ color:inherit; }
+  .mono{ font-family:'IBM Plex Mono', ui-monospace, monospace; font-variant-numeric:tabular-nums; }
+  .wrap{ max-width:1160px; margin:0 auto; padding-inline:clamp(1.25rem, 4vw, 2.5rem); }
+  .prose{ max-width:38rem; }
+  :focus-visible{ outline:3px solid var(--focus); outline-offset:3px; }
+  .skip-link{
+    position:absolute; left:1rem; top:-3rem;
+    background:var(--ink); color:var(--bg);
+    padding:.6rem 1rem; border-radius:4px; z-index:100;
+    transition:top .15s ease;
+  }
+  .skip-link:focus{ top:1rem; }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+  }
+
+  /* ---- header ---- */
+  header.site{
+    position:sticky; top:0; z-index:20;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .site nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding-block:.9rem;
+  }
+  .brand{ display:flex; align-items:center; gap:.55rem; text-decoration:none; }
+  .brand svg{ width:26px; height:26px; }
+  .brand span{
+    font-family:'Big Shoulders Display', sans-serif; font-weight:900;
+    font-size:1.3rem; letter-spacing:.03em; text-transform:uppercase;
+  }
+  .nav-links{ display:flex; align-items:center; gap:1.75rem; list-style:none; margin:0; padding:0; }
+  .nav-links a{ text-decoration:none; font-weight:500; font-size:.95rem; color:var(--ink-soft); }
+  .nav-links a:hover{ color:var(--ink); }
+  #nav-faq-link{ color:var(--sky); }
+  #nav-faq-link:hover{ color:var(--accent-strong); }
+  .nav-links{ display:none; }
+  @media (min-width:760px){ .nav-links{ display:flex; } }
+
+  .btn{
+    display:inline-flex; align-items:center; gap:.5rem;
+    font-family:'Work Sans', sans-serif; font-weight:600; font-size:.95rem;
+    padding:.7rem 1.3rem; border-radius:3px; text-decoration:none;
+    border:1px solid transparent; cursor:pointer;
+  }
+  .btn-primary{ background:var(--accent-strong); color:var(--on-accent); }
+  .btn-primary:hover{ background:var(--accent); }
+  .btn-ghost{ background:transparent; color:var(--ink); border-color:var(--line-strong); }
+  .btn-ghost:hover{ border-color:var(--ink-faint); }
+
+  /* ---- hero ---- */
+  .hero{ position:relative; overflow:hidden; border-bottom:1px solid var(--line); }
+  .hero canvas{ position:absolute; inset:0; width:100%; height:100%; opacity:.5; }
+  .hero-inner{ position:relative; padding-block:clamp(2.5rem, 6vw, 4.5rem); }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:.78rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--accent-strong); font-weight:500;
+    display:flex; align-items:center; gap:.5rem; margin-bottom:1.1rem;
+  }
+  .eyebrow::before{ content:""; width:1.6rem; height:1px; background:var(--accent-strong); }
+  h1.hero-title{ font-size:clamp(2.6rem, 5.4vw + 1rem, 4.6rem); max-width:14ch; }
+  .hero-sub{
+    margin-top:1.4rem; max-width:42ch; font-size:1.1rem; color:var(--ink-soft);
+  }
+  .hero-ctas{ display:flex; flex-wrap:wrap; gap:.9rem; margin-top:2rem; }
+  .hero-grid{
+    display:grid; grid-template-columns:1fr; gap:2.5rem; align-items:end;
+    margin-top:3rem;
+  }
+  @media (min-width:900px){ .hero-grid{ grid-template-columns:1.1fr 1fr; } }
+
+  /* ---- elevation card ---- */
+  .elev-card{
+    background:var(--bg-raised); border:1px solid var(--line);
+    border-radius:6px; padding:1.4rem 1.4rem 1rem;
+  }
+  .elev-head{ display:flex; justify-content:space-between; align-items:baseline; gap:1rem; flex-wrap:wrap; }
+  .elev-head h3{ font-size:1.15rem; text-transform:none; font-weight:700; font-family:'Work Sans',sans-serif; }
+  .elev-head .mono{ font-size:.85rem; color:var(--ink-soft); }
+  .elev-stats{ display:flex; gap:1.5rem; margin-top:.9rem; flex-wrap:wrap; }
+  .elev-stat b{ display:block; font-family:'IBM Plex Mono',monospace; font-size:1.25rem; font-variant-numeric:tabular-nums; }
+  .elev-stat span{ font-size:.75rem; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-faint); }
+  svg.elev-chart{ width:100%; height:auto; margin-top:.6rem; overflow:visible; }
+  .elev-chart .grid-line{ stroke:var(--line); stroke-width:1; }
+  .elev-chart .axis-label{ fill:var(--ink-faint); font:500 10px 'IBM Plex Mono', monospace; }
+  .elev-chart .area{ fill:var(--accent); opacity:.16; }
+  .elev-chart .line{ fill:none; stroke:var(--accent-strong); stroke-width:2.5; stroke-linejoin:round; stroke-linecap:round; }
+  .elev-chart .summit{ fill:var(--accent-strong); }
+  .elev-chart .summit-label{ fill:var(--ink); font:600 11px 'Work Sans', sans-serif; }
+
+  /* ---- sections ---- */
+  section{ padding-block:clamp(3rem, 7vw, 5.5rem); }
+  .section-head{ max-width:38rem; margin-bottom:2.5rem; }
+  .section-head .eyebrow{ margin-bottom:.6rem; }
+  h2{ font-size:clamp(1.8rem, 2.4vw + 1rem, 2.6rem); }
+  .section-head p{ color:var(--ink-soft); margin-top:.8rem; font-size:1.05rem; }
+
+  .steps{ display:grid; gap:1.75rem; grid-template-columns:1fr; counter-reset:step; }
+  @media (min-width:760px){ .steps{ grid-template-columns:repeat(3,1fr); } }
+  .step{ border-top:2px solid var(--line-strong); padding-top:1.1rem; }
+  .step .num{
+    font-family:'IBM Plex Mono',monospace; font-size:.85rem; color:var(--accent-strong);
+    font-weight:500;
+  }
+  .step h3{ font-family:'Work Sans',sans-serif; text-transform:none; font-size:1.2rem; font-weight:700; margin-top:.5rem; }
+  .step p{ color:var(--ink-soft); margin-top:.5rem; font-size:.98rem; }
+
+  .features{ background:var(--bg-sunken); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .feature-grid{ display:grid; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:6px; overflow:hidden; grid-template-columns:1fr; }
+  @media (min-width:640px){ .feature-grid{ grid-template-columns:1fr 1fr; } }
+  .feature{ background:var(--bg); padding:1.6rem; }
+  .feature h3{ font-family:'Work Sans',sans-serif; text-transform:none; font-size:1.08rem; font-weight:700; display:flex; align-items:center; gap:.6rem; }
+  .feature h3 svg{ width:20px; height:20px; flex:none; color:var(--moss); }
+  .feature p{ color:var(--ink-soft); margin-top:.55rem; font-size:.96rem; }
+
+  .quote{
+    border-left:3px solid var(--accent-strong); padding-left:1.5rem;
+    max-width:40rem;
+  }
+  .quote p{ font-size:1.35rem; font-family:'Big Shoulders Display',sans-serif; font-weight:700; text-transform:none; line-height:1.25; text-wrap:balance; }
+  .quote footer{ margin-top:1rem; font-size:.9rem; color:var(--ink-soft); font-family:'IBM Plex Mono',monospace; }
+
+  .faq{ max-width:42rem; }
+  .faq details{ border-bottom:1px solid var(--line); padding-block:1rem; }
+  .faq summary{ cursor:pointer; font-weight:600; font-size:1.02rem; list-style:none; display:flex; justify-content:space-between; gap:1rem; }
+  .faq summary::-webkit-details-marker{ display:none; }
+  .faq summary::after{ content:"+"; font-family:'IBM Plex Mono',monospace; color:var(--accent-strong); font-size:1.2rem; flex:none; }
+  .faq details[open] summary::after{ content:"–"; }
+  .faq p{ color:var(--ink-soft); margin-top:.7rem; font-size:.98rem; }
+
+  .cta-band{
+    background:var(--ink); color:var(--bg);
+    border-radius:8px; padding:clamp(2rem,5vw,3.5rem);
+    display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:1.5rem;
+  }
+  .cta-band h2{ color:var(--bg); font-size:clamp(1.6rem,2.6vw+1rem,2.3rem); max-width:16ch; }
+  :root[data-theme="dark"] .cta-band, @media (prefers-color-scheme:dark){ }
+
+  footer.site{ border-top:1px solid var(--line); padding-block:2.5rem; }
+  .foot-grid{ display:flex; flex-wrap:wrap; justify-content:space-between; gap:1.5rem; align-items:center; }
+  .foot-links{ display:flex; gap:1.5rem; list-style:none; padding:0; margin:0; }
+  .foot-links a{ text-decoration:none; color:var(--ink-soft); font-size:.9rem; }
+  .foot-links a:hover{ color:var(--ink); }
+  .fineprint{ color:var(--ink-faint); font-size:.82rem; margin-top:1.5rem; }
+</style>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site">
+  <div class="wrap">
+    <nav aria-label="Primary">
+      <a class="brand" href="#top">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2 18 L8 8 L11 13 L14 6 L22 18" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" style="color:var(--accent-strong)"/></svg>
+        <span>Contour</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#faq" id="nav-faq-link">FAQ</a></li>
+      </ul>
+      <a class="btn btn-primary" href="#get">Start mapping</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" id="top">
+    <canvas id="contourCanvas" aria-hidden="true"></canvas>
+    <div class="wrap hero-inner">
+      <p class="eyebrow">Route planning for trail runners</p>
+      <h1 class="hero-title">Plan the run<br>by its vert,<br>not just its miles.</h1>
+      <p class="hero-sub">Contour turns any hand-drawn or imported route into a mile-by-mile read of climb, descent, and surface — so you know what a day in the mountains actually costs before you lace up.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="#get">Start mapping — free</a>
+        <a class="btn btn-ghost" href="#sample">See a sample route ↓</a>
+      </div>
+
+      <div class="hero-grid" id="sample">
+        <div>
+          <h2 style="font-size:clamp(1.5rem,2vw+1rem,2.1rem); max-width:12ch;">Every pitch, before you commit to it.</h2>
+          <p class="hero-sub" style="margin-top:1rem; max-width:36ch;">Draw a line or drop in a GPX file. Contour breaks it into climbs and descents, flags exposed ridgelines, and estimates moving time from your own recent pace.</p>
+        </div>
+        <div class="elev-card">
+          <div class="elev-head">
+            <h3>Bear Peak Loop</h3>
+            <span class="mono">40.02° N, 105.30° W</span>
+          </div>
+          <div class="elev-stats">
+            <div class="elev-stat"><b class="mono">14.2 mi</b><span>Distance</span></div>
+            <div class="elev-stat"><b class="mono">+3,081′</b><span>Gain</span></div>
+            <div class="elev-stat"><b class="mono">−3,081′</b><span>Loss</span></div>
+            <div class="elev-stat"><b class="mono">8,461′</b><span>Summit</span></div>
+          </div>
+          <svg class="elev-chart" id="elevChart" viewBox="0 0 640 240" role="img" aria-label="Elevation profile of the Bear Peak Loop, climbing from 5,600 feet at the trailhead to an 8,461 foot summit at mile 7, then descending back to the trailhead by mile 14.2."></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">How it works</p>
+        <h2>From a line on a map to a route you trust</h2>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <span class="num">01 — Draw or import</span>
+          <h3>Sketch it, or drop in a file</h3>
+          <p>Trace a route on the map, or import a GPX from Strava, CalTopo, or your watch. Contour snaps it to known trail geometry.</p>
+        </div>
+        <div class="step">
+          <span class="num">02 — Read the vert</span>
+          <h3>See the terrain, not just the line</h3>
+          <p>Contour splits the route into pitches, flags exposed ridgelines and scree, and estimates moving time from your recent pace data.</p>
+        </div>
+        <div class="step">
+          <span class="num">03 — Carry it offline</span>
+          <h3>Take it where signal doesn't reach</h3>
+          <p>Export to Garmin, Suunto, or COROS, or cache the vector map on your phone for zero-signal navigation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" id="features">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">What's inside</p>
+        <h2>Built around the questions a route actually raises</h2>
+      </div>
+      <div class="feature-grid">
+        <div class="feature">
+          <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17 L9 9 L13 13 L21 4"/></svg>Pitch-by-pitch grade</h3>
+          <p>Every climb and descent broken into named pitches with average and max grade, not one blended number for the whole route.</p>
+        </div>
+        <div class="feature">
+          <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16M4 12l4-4M4 12l4 4M20 12l-4-4M20 12l-4 4"/></svg>Surface &amp; exposure flags</h3>
+          <p>Singletrack, scree, road, and river crossings called out along the line, with exposed ridgeline sections marked before you commit.</p>
+        </div>
+        <div class="feature">
+          <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 15l4-4 4 3 5-6 3 3"/></svg>Offline vector maps</h3>
+          <p>Cache the full route and surrounding terrain before you go — Contour keeps working with the phone in airplane mode.</p>
+        </div>
+        <div class="feature">
+          <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>Watch-ready exports</h3>
+          <p>One tap to GPX or FIT, with course-point and climb-alert profiles tuned for Garmin, Suunto, and COROS devices.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <blockquote class="quote">
+        <p>&ldquo;I stopped finding out about the false summit at mile eleven. Now I find out at my kitchen table.&rdquo;</p>
+        <footer>— Dana R., 50-mile finisher</footer>
+      </blockquote>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Questions</p>
+        <h2>Before you head out</h2>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>Does Contour work offline in the backcountry?</summary>
+          <p>Yes. Cache any route's vector map and elevation data before you leave signal — Contour keeps working with the phone in airplane mode.</p>
+        </details>
+        <details>
+          <summary>Which watches can I export routes to?</summary>
+          <p>GPX and FIT export are built in, with tested profiles for Garmin, Suunto, and COROS devices.</p>
+        </details>
+        <details>
+          <summary>How accurate is the elevation data on exposed alpine terrain?</summary>
+          <p>Contour blends satellite DEM data with corrected barometric traces from public GPX uploads, so switchback-heavy and above-treeline sections stay accurate to roughly 15 feet per mile.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section id="get">
+    <div class="wrap">
+      <div class="cta-band">
+        <h2>Map your next long day before you drive to the trailhead.</h2>
+        <a class="btn btn-primary" href="#top" style="background:var(--accent); color:#171203;">Start mapping — free</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-grid">
+      <a class="brand" href="#top">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2 18 L8 8 L11 13 L14 6 L22 18" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" style="color:var(--accent-strong)"/></svg>
+        <span>Contour</span>
+      </a>
+      <ul class="foot-links">
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </div>
+    <p class="fineprint">© 2026 Contour Trail Planner. A practice landing page — no real product or purchase behind this link.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var data = [[0,5600],[1,5480],[2.5,6100],[4,6050],[5.5,7100],[7,8461],[8.5,7700],[10,7750],[11.5,6400],[13,5950],[14.2,5600]];
+  var svg = document.getElementById('elevChart');
+  var W = 640, H = 240, padL = 44, padR = 12, padT = 16, padB = 26;
+  var xMax = 14.2, yMin = 5000, yMax = 8800;
+  function sx(mi){ return padL + (mi / xMax) * (W - padL - padR); }
+  function sy(ft){ return (H - padB) - ((ft - yMin) / (yMax - yMin)) * (H - padT - padB); }
+
+  var svgns = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs){
+    var e = document.createElementNS(svgns, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+
+  var yTicks = [5000,6000,7000,8000];
+  yTicks.forEach(function(ft){
+    var y = sy(ft);
+    svg.appendChild(el('line', {class:'grid-line', x1:padL, x2:W-padR, y1:y, y2:y}));
+    var t = el('text', {class:'axis-label', x:padL-8, y:y+3, 'text-anchor':'end'});
+    t.textContent = ft.toLocaleString() + "'";
+    svg.appendChild(t);
+  });
+  var xTicks = [0,2,4,6,8,10,12,14];
+  xTicks.forEach(function(mi){
+    var x = sx(mi);
+    var t = el('text', {class:'axis-label', x:x, y:H-6, 'text-anchor':'middle'});
+    t.textContent = mi + 'mi';
+    svg.appendChild(t);
+  });
+
+  var linePts = data.map(function(p){ return sx(p[0]) + ',' + sy(p[1]); }).join(' ');
+  var areaPts = linePts + ' ' + sx(xMax) + ',' + sy(yMin) + ' ' + sx(0) + ',' + sy(yMin);
+  svg.appendChild(el('polygon', {class:'area', points:areaPts}));
+  svg.appendChild(el('polyline', {class:'line', points:linePts}));
+
+  var summit = data.reduce(function(a,b){ return b[1] > a[1] ? b : a; });
+  svg.appendChild(el('circle', {class:'summit', cx:sx(summit[0]), cy:sy(summit[1]), r:4}));
+  var label = el('text', {class:'summit-label', x:sx(summit[0]), y:sy(summit[1])-12, 'text-anchor':'middle'});
+  label.textContent = 'Bear Peak · 8,461′';
+  svg.appendChild(label);
+
+  var canvas = document.getElementById('contourCanvas');
+  var ctx = canvas.getContext('2d');
+  function drawContours(){
+    var rect = canvas.parentElement.getBoundingClientRect();
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,rect.width,rect.height);
+    var stroke = getComputedStyle(document.documentElement).getPropertyValue('--line-strong').trim();
+    ctx.strokeStyle = stroke || '#AAB495';
+    ctx.lineWidth = 1;
+    var lines = 9;
+    for (var i=0; i<lines; i++){
+      var baseY = (rect.height / (lines+1)) * (i+1) + Math.sin(i*1.7)*18;
+      ctx.beginPath();
+      for (var x=0; x<=rect.width; x+=8){
+        var y = baseY
+          + Math.sin(x*0.006 + i*0.9) * (24 + i*2)
+          + Math.sin(x*0.017 + i*2.3) * 8;
+        if (x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    }
+  }
+  drawContours();
+  var resizeTimer;
+  window.addEventListener('resize', function(){
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(drawContours, 120);
+  });
+  if (window.matchMedia){
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', drawContours);
+  }
+})();
+</script>
+
+</body></html>

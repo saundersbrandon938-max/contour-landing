@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brandon Saunders — Custom Websites for Small Businesses</title>
+<meta name="description" content="Fast, affordable custom websites for small businesses. Landing pages, full sites, and interactive features — live in days, not weeks.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --accent: #1a5c6b;
+  --accent-light: #e8f4f6;
+  --accent-hover: #134a57;
+  --bg: #faf9f7;
+  --bg-alt: #f0eeeb;
+  --text: #1a1a1a;
+  --text-muted: #5a5a5a;
+  --text-inv: #faf9f7;
+  --card-bg: #ffffff;
+  --card-border: #e5e3df;
+  --card-shadow: rgba(0,0,0,0.04);
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --max-w: 1120px;
+  --gutter: 16px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --accent: #3fb8cc;
+    --accent-light: #1a2e33;
+    --accent-hover: #5ac8d9;
+    --bg: #111113;
+    --bg-alt: #1a1a1e;
+    --text: #e8e6e3;
+    --text-muted: #9a9894;
+    --text-inv: #111113;
+    --card-bg: #1e1e22;
+    --card-border: #2e2e33;
+    --card-shadow: rgba(0,0,0,0.2);
+  }
+}
+
+:root[data-theme="dark"] {
+  --accent: #3fb8cc;
+  --accent-light: #1a2e33;
+  --accent-hover: #5ac8d9;
+  --bg: #111113;
+  --bg-alt: #1a1a1e;
+  --text: #e8e6e3;
+  --text-muted: #9a9894;
+  --text-inv: #111113;
+  --card-bg: #1e1e22;
+  --card-border: #2e2e33;
+  --card-shadow: rgba(0,0,0,0.2);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+.container {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+h1, h2, h3 { font-family: var(--serif); font-weight: 400; line-height: 1.2; }
+h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); }
+h2 { font-size: clamp(1.6rem, 3.5vw, 2.4rem); margin-bottom: 1rem; }
+h3 { font-size: 1.25rem; margin-bottom: 0.5rem; }
+
+.section {
+  padding: 5rem 0;
+}
+
+.section--alt {
+  background: var(--bg-alt);
+}
+
+/* ── NAV ── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg);
+  border-bottom: 1px solid var(--card-border);
+  backdrop-filter: blur(10px);
+}
+
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.nav__logo {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.nav__links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav__links a {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav__links a:hover { color: var(--text); text-decoration: none; }
+
+.nav__toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  padding: 8px;
+}
+
+@media (max-width: 640px) {
+  .nav__links {
+    display: none;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--card-border);
+    flex-direction: column;
+    padding: 1rem var(--gutter);
+    gap: 1rem;
+  }
+  .nav__links.open { display: flex; }
+  .nav__toggle { display: block; }
+}
+
+/* ── HERO ── */
+.hero {
+  padding: 6rem 0 5rem;
+  text-align: center;
+}
+
+.hero__sub {
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  color: var(--text-muted);
+  max-width: 560px;
+  margin: 1.25rem auto 2.5rem;
+}
+
+.btn {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--text-inv);
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.85rem 2rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  text-decoration: none;
+}
+
+.btn:hover { background: var(--accent-hover); text-decoration: none; transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+
+.btn--outline {
+  background: transparent;
+  color: var(--accent);
+  border: 2px solid var(--accent);
+}
+
+.btn--outline:hover {
+  background: var(--accent);
+  color: var(--text-inv);
+}
+
+.hero__cta-group {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ── SERVICES ── */
+.services__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 1px 3px var(--card-shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px var(--card-shadow);
+}
+
+.card__icon {
+  width: 48px;
+  height: 48px;
+  background: var(--accent-light);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  color: var(--accent);
+}
+
+.card__desc {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+/* ── FEATURED WORK ── */
+.featured {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+  margin-top: 2.5rem;
+}
+
+@media (max-width: 768px) {
+  .featured { grid-template-columns: 1fr; }
+}
+
+.featured__preview {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  box-shadow: 0 8px 30px var(--card-shadow);
+  background: var(--card-bg);
+  aspect-ratio: 16 / 10;
+  position: relative;
+}
+
+.featured__preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.featured__browser-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: var(--bg-alt);
+  border-bottom: 1px solid var(--card-border);
+}
+
+.featured__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--card-border);
+}
+
+.featured__url {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-left: 8px;
+  font-family: var(--sans);
+}
+
+.featured__info h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.featured__info p {
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.featured__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.tag {
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.3rem 0.75rem;
+  border-radius: 100px;
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+/* ── PROCESS ── */
+.process__steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-top: 2.5rem;
+  counter-reset: step;
+}
+
+.step {
+  text-align: center;
+  counter-increment: step;
+  position: relative;
+}
+
+.step__number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--text-inv);
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.step h3 { font-size: 1.1rem; margin-bottom: 0.35rem; }
+.step p { color: var(--text-muted); font-size: 0.9rem; }
+
+/* connector lines between steps */
+@media (min-width: 800px) {
+  .step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 24px;
+    left: calc(50% + 32px);
+    width: calc(100% - 64px);
+    height: 2px;
+    background: var(--card-border);
+  }
+}
+
+/* ── ABOUT ── */
+.about__content {
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.about__content p {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+/* ── CONTACT ── */
+.contact__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-top: 2.5rem;
+}
+
+@media (max-width: 768px) {
+  .contact__inner { grid-template-columns: 1fr; }
+}
+
+.contact__info p {
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+  font-size: 1.05rem;
+}
+
+.form { display: flex; flex-direction: column; gap: 1rem; }
+
+.form__group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  color: var(--text);
+}
+
+.form__group input,
+.form__group textarea {
+  width: 100%;
+  font-family: var(--sans);
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  background: var(--card-bg);
+  color: var(--text);
+  transition: border-color 0.2s;
+}
+
+.form__group input:focus,
+.form__group textarea:focus {
+  border-color: var(--accent);
+}
+
+.form__group textarea { resize: vertical; min-height: 120px; }
+
+/* ── FOOTER ── */
+.footer {
+  text-align: center;
+  padding: 2.5rem 0;
+  border-top: 1px solid var(--card-border);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* ── SKIP LINK ── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  background: var(--accent);
+  color: var(--text-inv);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  z-index: 200;
+  font-weight: 600;
+}
+.skip-link:focus { top: 8px; }
+
+/* ── ANIMATIONS ── */
+@media (prefers-reduced-motion: no-preference) {
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-in { opacity: 1; transform: none; }
+}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<!-- NAV -->
+<nav class="nav" aria-label="Main navigation">
+  <div class="container nav__inner">
+    <a href="#" class="nav__logo">Brandon Saunders</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+    <ul class="nav__links" role="list">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main">
+
+  <!-- HERO -->
+  <section class="hero section">
+    <div class="container">
+      <h1 class="fade-in">Custom websites, live in<br>days — not weeks</h1>
+      <p class="hero__sub fade-in">Affordable, professionally built websites for small businesses that need to look great and launch fast.</p>
+      <div class="hero__cta-group fade-in">
+        <a href="#contact" class="btn">Get a free quote</a>
+        <a href="#work" class="btn btn--outline">See my work</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="section section--alt">
+    <div class="container">
+      <h2 class="fade-in" style="text-align:center;">What I build</h2>
+      <div class="services__grid">
+        <div class="card fade-in">
+          <div class="card__icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          </div>
+          <h3>Landing Pages</h3>
+          <p class="card__desc">High-converting single-page sites that tell your story, showcase your work, and turn visitors into customers.</p>
+        </div>
+        <div class="card fade-in">
+          <div class="card__icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <h3>Small Business Websites</h3>
+          <p class="card__desc">Multi-page sites with everything a local business needs — services, gallery, contact, and a design that builds trust.</p>
+        </div>
+        <div class="card fade-in">
+          <div class="card__icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18M7.5 7.5l9 9M16.5 7.5l-9 9"/></svg>
+          </div>
+          <h3>Interactive Features</h3>
+          <p class="card__desc">Quizzes, calculators, custom forms, and smart tools that engage visitors and make your site unforgettable.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED WORK -->
+  <section id="work" class="section">
+    <div class="container">
+      <h2 class="fade-in" style="text-align:center;">Featured work</h2>
+      <div class="featured fade-in">
+        <div class="featured__preview">
+          <div class="featured__browser-bar" aria-hidden="true">
+            <span class="featured__dot"></span>
+            <span class="featured__dot"></span>
+            <span class="featured__dot"></span>
+            <span class="featured__url">sugarandbloombakery.netlify.app</span>
+          </div>
+          <div style="background: linear-gradient(135deg, #f3eff3 0%, #e8dfe6 100%); display:flex; align-items:center; justify-content:center; height:calc(100% - 38px); padding: 2rem;">
+            <div style="text-align:center;">
+              <div style="font-family: var(--serif); font-size: clamp(1.4rem, 3vw, 2rem); color: #5a1a3e; margin-bottom: 0.5rem;">Sugar &amp; Bloom</div>
+              <div style="color: #7a5a6e; font-size: 0.9rem;">Handcrafted Cakes, Baked to Order</div>
+            </div>
+          </div>
+        </div>
+        <div class="featured__info">
+          <h3>Sugar &amp; Bloom Bakery</h3>
+          <p>A complete landing page for a handcrafted cake business — featuring a personality quiz that recommends the perfect cake, a pre-filled order form, and full accessibility support with proper contrast and keyboard navigation throughout.</p>
+          <div class="featured__tags">
+            <span class="tag">Personality Quiz</span>
+            <span class="tag">Order Form</span>
+            <span class="tag">Accessible</span>
+            <span class="tag">Responsive</span>
+          </div>
+          <a href="https://sugarandbloombakery.netlify.app/" class="btn" target="_blank" rel="noopener noreferrer">View live site &rarr;</a>
+        </div>
+      </div>
+
+      <div class="featured fade-in" style="margin-top: 3rem;">
+        <div class="featured__preview">
+          <div class="featured__browser-bar" aria-hidden="true">
+            <span class="featured__dot"></span>
+            <span class="featured__dot"></span>
+            <span class="featured__dot"></span>
+            <span class="featured__url">pulseandflowplan.com</span>
+          </div>
+          <div style="background: linear-gradient(135deg, #f7edf5 0%, #dfeae7 100%); display:flex; align-items:center; justify-content:center; height:calc(100% - 38px); padding: 2rem;">
+            <div style="text-align:center;">
+              <div style="font-family: var(--serif); font-size: clamp(1.3rem, 2.7vw, 1.9rem); color: #9b184e; margin-bottom: 0.5rem;">Pulse &amp; Flow</div>
+              <div style="color: #566b66; font-size: 0.9rem;">Marketing Strategy + Studio Positioning</div>
+            </div>
+          </div>
+        </div>
+        <div class="featured__info">
+          <h3>Pulse &amp; Flow Marketing Plan</h3>
+          <p>A positioning and acquisition strategy for a boutique HIIT + recovery studio concept — built around competitor analysis, content pillars, launch sequencing, and a 90-day plan to turn interest into booked classes.</p>
+          <div class="featured__tags">
+            <span class="tag">Brand Positioning</span>
+            <span class="tag">Marketing Plan</span>
+            <span class="tag">Content Strategy</span>
+            <span class="tag">Launch Funnel</span>
+          </div>
+          <a href="/pulse-and-flow-marketing-plan-portfolio.html" class="btn">View project &rarr;</a>
+        </div>
+      </div>
+
+      <div class="featured fade-in" style="margin-top: 3rem;">
+        <div class="featured__preview">
+          <div class="featured__browser-bar" aria-hidden="true">
+            <span class="featured__dot"></span>
+            <span class="featured__dot"></span>
+            <span class="featured__dot"></span>
+            <span class="featured__url">contourtrail.app</span>
+          </div>
+          <div style="background: linear-gradient(135deg, #eef4ee 0%, #dbe8d7 100%); display:flex; align-items:center; justify-content:center; height:calc(100% - 38px); padding: 2rem;">
+            <div style="text-align:center;">
+              <div style="font-family: var(--serif); font-size: clamp(1.1rem, 2.1vw, 1.5rem); color: #294d36; margin-bottom: 0.5rem;">controltrailplanner.html</div>
+              <div style="color: #5a6c60; font-size: 0.9rem;">Contour Trail Planner</div>
+            </div>
+          </div>
+        </div>
+        <div class="featured__info">
+          <h3>Contour Trail Planner</h3>
+          <p>A trail-running product concept that turns route data into practical decision-making — combining terrain analysis, elevation planning, and fitness-friendly route summaries into a clean and useful product experience.</p>
+          <div class="featured__tags">
+            <span class="tag">App UX</span>
+            <span class="tag">Trail Data</span>
+            <span class="tag">Product Design</span>
+            <span class="tag">controltrailplanner.html</span>
+          </div>
+          <a href="/contourtrailplanner.html" class="btn">View project &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process" class="section section--alt">
+    <div class="container">
+      <h2 class="fade-in" style="text-align:center;">How I work</h2>
+      <div class="process__steps">
+        <div class="step fade-in">
+          <div class="step__number">1</div>
+          <h3>Quick consult</h3>
+          <p>We chat about your business, goals, and what you need. No jargon, no pressure.</p>
+        </div>
+        <div class="step fade-in">
+          <div class="step__number">2</div>
+          <h3>Build</h3>
+          <p>I get to work and have a working draft ready in 2–3 days.</p>
+        </div>
+        <div class="step fade-in">
+          <div class="step__number">3</div>
+          <h3>Review &amp; refine</h3>
+          <p>You review, I adjust. We iterate until it feels right.</p>
+        </div>
+        <div class="step fade-in">
+          <div class="step__number">4</div>
+          <h3>Launch</h3>
+          <p>Your site goes live. I handle hosting setup and make sure everything runs smoothly.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section">
+    <div class="container">
+      <div class="about__content fade-in">
+        <h2>About me</h2>
+        <p>I'm a freelance web developer who helps small businesses get online fast — without cutting corners. I use modern AI-assisted development tools to build at speed while keeping the quality high: clean code, thoughtful design, and sites that work beautifully on every device. You get a premium result without the agency price tag or the months-long timeline.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section section--alt">
+    <div class="container">
+      <h2 class="fade-in" style="text-align:center;">Let's build something</h2>
+      <div class="contact__inner">
+        <div class="contact__info fade-in">
+          <p>Have a project in mind? Send me a message and I'll get back to you within 24 hours. Or, if you prefer, find me on Fiverr.</p>
+          <a href="#" class="btn btn--outline">View my Fiverr profile &rarr;</a>
+        </div>
+        <form class="form fade-in" action="https://formsubmit.co/Soundwave355@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="New inquiry from your portfolio site">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="text" name="_honey" style="display:none">
+          <div class="form__group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required autocomplete="name" placeholder="Your name">
+          </div>
+          <div class="form__group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@example.com">
+          </div>
+          <div class="form__group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" required placeholder="Tell me about your project..."></textarea>
+          </div>
+          <button type="submit" class="btn" style="align-self:flex-start;">Send message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <p>&copy; 2026 Brandon Saunders. Built with care.</p>
+  </div>
+</footer>
+
+<script>
+// Mobile nav toggle
+const toggle = document.querySelector('.nav__toggle');
+const navLinks = document.querySelector('.nav__links');
+toggle.addEventListener('click', () => {
+  const open = navLinks.classList.toggle('open');
+  toggle.setAttribute('aria-expanded', open);
+});
+
+// Close mobile nav on link click
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  });
+});
+
+// Scroll fade-in
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.05, rootMargin: '50px 0px -20px 0px' });
+
+document.querySelectorAll('.fade-in').forEach(el => {
+  const rect = el.getBoundingClientRect();
+  if (rect.top < window.innerHeight && rect.bottom > 0) {
+    el.classList.add('visible');
+  } else {
+    observer.observe(el);
+  }
+});
+
+</script>
+
+</body>
+</html>
